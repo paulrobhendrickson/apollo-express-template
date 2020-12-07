@@ -1,5 +1,5 @@
 {
-  "name": "apollo-typescript-start",
+  "name": "apollo-express-template",
   "version": "1.0.0",
   "main": "dist/server.js",
   "author": "Paul Hendrickson",
