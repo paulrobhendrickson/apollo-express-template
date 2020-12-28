@@ -1,23 +1,33 @@
-import { ApolloServer } from "apollo-server-express";
+import express from "express";
+import logger from "morgan";
+import dotenv from "dotenv";
+import path from "path";
 
-import { app, port } from "./express/express";
-import { schema } from "./api/schema";
-import { NODE_ENV } from "./nodeEnv";
+import { apollo } from "./api/apollo";
 
-//link express server to apollo server. adding in schema and context
-export const apollo = new ApolloServer({
-  schema,
+dotenv.config();
 
-  debug: process.env.NODE_ENV === NODE_ENV.DEV,
-  tracing: process.env.NODE_ENV === NODE_ENV.DEV,
+export const app = express();
+const port = process.env.PORT || "4000";
 
-  formatError: (err) => {
-    if (err.message.startsWith("Database Error: ")) {
-      return new Error("Internal server error");
-    }
+app.set("port", port);
+app.use(logger("dev"));
+app.use(express.json());
 
-    return err;
-  },
+app.use("/public", express.static(path.join(__dirname, "public")));
+
+app.get("/", (_req, res) => {
+  res.redirect(301, "/public/index.html");
+});
+
+//when posts sent to root directory redirect to /graphql
+app.post("/", (_req, res) => {
+  res.redirect(308, "/graphql");
+});
+
+//This is just used for health checker
+app.get("/health", (_req, res) => {
+  res.send("Ok");
 });
 
 apollo.applyMiddleware({ app });
