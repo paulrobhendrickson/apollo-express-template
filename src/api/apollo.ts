@@ -1,6 +1,6 @@
 import { ApolloServer } from "apollo-server-express";
 
-import { schema } from "./schema";
+import { schema } from "./graphQL/schema";
 import { NODE_ENV } from "./config/nodeEnv";
 
 //link express server to apollo server. adding in schema and context
