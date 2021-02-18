@@ -17,14 +17,17 @@ app.use(express.json());
 app.use("/public", express.static(path.join(__dirname, "public")));
 
 app.get("/", (_req, res) => {
-  res.redirect(301, "/public/index.html");
+  res.redirect(301, "/graphql");
+});
+
+app.get("/public/*", (_req, res) => {
+  res.redirect(301, "/public/visualizer.html");
 });
 
 //when posts sent to root directory redirect to /graphql
 app.post("/", (_req, res) => {
   res.redirect(308, "/graphql");
 });
-
 //This is just used for health checker
 app.get("/health", (_req, res) => {
   res.send("Ok");
